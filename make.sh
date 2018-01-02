@@ -11,7 +11,7 @@ TAG_NAME="${NAME}"
 TAG_TAG="latest"
 
 # Environment varaibles
-DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.8.8:3142}
+DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.10.8:3142}
 DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:---build-arg DOCKER_BUILD_PROXY=$DOCKER_BUILD_PROXY}
 
 rundir=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
@@ -73,10 +73,14 @@ run_extract(){
   tar -xvf ${RELEASE_FILE}
 }
 
-run_rebuild(){
-  run_build
+run_restart(){
   run_stop
   run_start
+}
+
+run_rebuild(){
+  run_build
+  run_restart
 }
 
 run_run(){ run_start "$@"; }
@@ -156,6 +160,7 @@ case $cmd in
   "download")       run_download "$@";;
   "build:proxy")    run_build_proxy "$@";;
   "run")            run_run "$@";;
+  "restart")        run_restart "$@";;
   '-h'|'--help'|'h'|'help') run_help;;
 esac
 
