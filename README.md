@@ -1,4 +1,4 @@
-# Verdaccio - npm registry
+# Verdaccio npm registry
 
 Dockerfile for setting up and running a [Verdaccio](http://www.verdaccio.org/) npm registry instance. 
 
