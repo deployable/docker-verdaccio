@@ -10,9 +10,6 @@ TAG_PREFIX="deployable"
 TAG_NAME="${NAME}"
 TAG_TAG="latest"
 
-# Environment varaibles
-DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.10.8:3142}
-DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:---build-arg DOCKER_BUILD_PROXY=$DOCKER_BUILD_PROXY}
 
 rundir=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
 canonical="$rundir/$(basename -- "$0")"
@@ -28,6 +25,9 @@ cd "$rundir"
 
 set -uex
 
+# Environment
+DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-}
+
 ####
 
 die(){
@@ -42,8 +42,13 @@ run_build_web(){
   yarn run build:webui
 }
 
+run_build_proxy(){
+  DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.10.8:3142} DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:---build-arg DOCKER_BUILD_PROXY=$DOCKER_BUILD_PROXY} run_build
+}
+
 run_build(){
   local tag=${1:-${TAG_TAG}}
+  DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:-}
   run_download_if_missing
   run_extract_if_missing 
   run_build_web
