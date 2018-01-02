@@ -34,7 +34,7 @@ RUN set -uex; \
     cd /app; \
     yarn install --production=true --pure-lockfile; \
     yarn cache clean; \
-    rm -rf ~/.yarn; \
+    rm -rf /usr/local/share/.cache/yarn; \
     apk del --purge python python-dev g++ musl-dev libc-dev gcc; \
     rm -rf /var/cache/apk;
 
