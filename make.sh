@@ -10,6 +10,10 @@ TAG_PREFIX="deployable"
 TAG_NAME="${NAME}"
 TAG_TAG="latest"
 
+# Environment varaibles
+DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.8.8:3142}
+DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:---build-arg DOCKER_BUILD_PROXY=$DOCKER_BUILD_PROXY}
+
 rundir=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
 canonical="$rundir/$(basename -- "$0")"
 
@@ -43,7 +47,8 @@ run_build(){
   run_download_if_missing
   run_extract_if_missing 
   run_build_web
-  docker build --build-arg DOCKER_BUILD_PROXY=http://10.8.8.8:3142 -t ${TAG_PREFIX}/${TAG_NAME}:${tag} .
+  docker build $DOCKER_BUILD_ARGS -t ${TAG_PREFIX}/${TAG_NAME}:${RELEASE} .
+  docker tag ${TAG_PREFIX}/${TAG_NAME}:${RELEASE} ${TAG_PREFIX}/${TAG_NAME}:${tag}
 }
 
 run_download_if_missing(){
