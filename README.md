@@ -4,3 +4,9 @@ Dockerfile for setting up and running a [Verdaccio](http://www.verdaccio.org/) n
 
 [Verdaccio](https://github.com/verdaccio/verdaccio) is the successor to [Sinopia](https://github.com/rlidwka/sinopia).
 
+## Usage
+
+```
+./make.sh build
+./make.sh run
+```
