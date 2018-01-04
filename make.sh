@@ -43,7 +43,9 @@ run_build_web(){
 }
 
 run_build_proxy(){
-  DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.10.8:3142} DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:---build-arg DOCKER_BUILD_PROXY=$DOCKER_BUILD_PROXY} run_build
+  DOCKER_BUILD_PROXY=${DOCKER_BUILD_PROXY:-http://10.8.10.8:3142}
+  DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:---build-arg DOCKER_BUILD_PROXY=$DOCKER_BUILD_PROXY}
+  DOCKER_BUILD_PROXY="$DOCKER_BUILD_PROXY" DOCKER_BUILD_ARGS="$DOCKER_BUILD_ARGS" run_build
 }
 
 run_build(){
@@ -51,7 +53,7 @@ run_build(){
   DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:-}
   run_download_if_missing
   run_extract_if_missing 
-  run_build_web
+  #run_build_web
   docker build $DOCKER_BUILD_ARGS -t ${TAG_PREFIX}/${TAG_NAME}:${RELEASE} .
   docker tag ${TAG_PREFIX}/${TAG_NAME}:${RELEASE} ${TAG_PREFIX}/${TAG_NAME}:${tag}
 }
@@ -96,7 +98,7 @@ run_start(){
     --publish ${PORT}:${PORT} \
     --name ${NAME} \
     --restart always  \
-    ${TAG_PREFIX}/${TAG_NAME}
+    ${TAG_PREFIX}/${TAG_NAME}:${RELEASE}
 }
 
 run_stop(){
