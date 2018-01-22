@@ -19,15 +19,15 @@ uplinks:
     maxage: 10m
     
 packages:
+  '@mhp/*':
+    access: $all
+    publish: $authenticated
+
   '@*/*':
     # scoped packages
     access: $all
     publish: $authenticated
     proxy: npmjs
-
-  '@mhp/*':
-    access: $all
-    publish: $authenticated
 
   '*':
     # allow all users (including non-authenticated users) to read and
