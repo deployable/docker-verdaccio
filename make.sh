@@ -3,7 +3,7 @@
 NAME="verdaccio"
 PATH_APP="/${NAME}"
 PORT=4873
-RELEASE="2.7.1"
+RELEASE="2.7.3"
 RELEASE_LABEL="${NAME}-${RELEASE}"
 RELEASE_FILE="${RELEASE_LABEL}.tar.gz"
 TAG_PREFIX="deployable"
@@ -89,6 +89,10 @@ run_rebuild(){
   run_build
   run_restart
 }
+run_rebuild_proxy(){
+  run_build_proxy
+  run_restart
+}
 
 run_run(){ run_start "$@"; }
 run_start(){
@@ -164,6 +168,7 @@ set -x
 case $cmd in
   "build")          run_build "$@";;
   "rebuild")        run_rebuild "$@";;
+  "rebuild:proxy")  run_rebuild_proxy "$@";;
   "download")       run_download "$@";;
   "build:proxy")    run_build_proxy "$@";;
   "run")            run_run "$@";;

@@ -8,11 +8,14 @@
 
 FROM mhart/alpine-node:8.9.3 AS build
 
+ARG VERDACCIO_VERSION=2.7.3
+ARG VERDACCIO_LABEL=verdaccio
+ARG VERDACCIO_LABEL_VERSION=$VERDACCIO_LABEL-$VERDACCIO_VERSION
 ARG DOCKER_BUILD_PROXY=''
 
-COPY verdaccio-2.7.1/package.json verdaccio-2.7.1/yarn.lock /app/
+COPY $VERDACCIO_LABEL_VERSION/package.json $VERDACCIO_LABEL_VERSION/yarn.lock /app/
 RUN yarn install
-COPY verdaccio-2.7.1 /app
+COPY $VERDACCIO_LABEL_VERSION /app
 RUN set -uex; \
     export http_proxy=${http_proxy:-${DOCKER_BUILD_PROXY}}; \
     apk update; \
@@ -26,8 +29,15 @@ RUN set -uex; \
     rm -rf /var/cache/apk;
 RUN cd /app && yarn run build:webui
 
+# Stage 2
+
 FROM mhart/alpine-node:8.9.3
 WORKDIR /app
+
+ARG VERDACCIO_VERSION=2.7.3
+ARG VERDACCIO_LABEL=verdaccio
+ARG VERDACCIO_LABEL_VERSION=$VERDACCIO_LABEL-$VERDACCIO_VERSION
+
 RUN set -uex; \
     adduser -D -g "" app; \
     adduser -D -g "" -G app appr; \
@@ -35,9 +45,9 @@ RUN set -uex; \
     chown app /app/storage; \
     chmod 755 /app/storage;
 
-COPY verdaccio-2.7.1/package.json verdaccio-2.7.1/yarn.lock /app/
+COPY $VERDACCIO_LABEL_VERSION/package.json $VERDACCIO_LABEL_VERSION/yarn.lock /app/
 RUN yarn install --production --pure-lockfile
-COPY verdaccio-2.7.1 /app
+COPY $VERDACCIO_LABEL_VERSION /app
 COPY --from=build /app/static /app/static
 
 # Use a custom verdaccio config
