@@ -1,0 +1,4 @@
+FROM deployable/verdaccio
+
+COPY /config.yaml.local /app/config.yaml
+

@@ -19,10 +19,6 @@ uplinks:
     maxage: 10m
     
 packages:
-  '@mhp/*':
-    access: $all
-    publish: $authenticated
-
   '@*/*':
     # scoped packages
     access: $all

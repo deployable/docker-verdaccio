@@ -56,6 +56,16 @@ run_build(){
   #run_build_web
   docker build $DOCKER_BUILD_ARGS -t ${TAG_PREFIX}/${TAG_NAME}:${RELEASE} .
   docker tag ${TAG_PREFIX}/${TAG_NAME}:${RELEASE} ${TAG_PREFIX}/${TAG_NAME}:${tag}
+  if [ -f config.yaml.local ]; then
+    run_build_local $tag
+  fi
+}
+
+run_build_local(){
+  local tag=${1:-${TAG_TAG}}
+  DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS:-}
+  docker build $DOCKER_BUILD_ARGS -f Dockerfile.local -t ${TAG_PREFIX}/${TAG_NAME}:${RELEASE}-local .
+  docker tag ${TAG_PREFIX}/${TAG_NAME}:${RELEASE}-local ${TAG_PREFIX}/${TAG_NAME}:${tag}-local
 }
 
 run_download_if_missing(){

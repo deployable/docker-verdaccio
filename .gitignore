@@ -1,2 +1,3 @@
 verdaccio-*.tar.gz
 verdaccio-*/
+config.yaml.local
