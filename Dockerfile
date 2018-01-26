@@ -1,11 +1,3 @@
-# first
-#
-#     docker build -t deployable/verdaccio .
-
-# repeat
-# 
-#     docker build --build-arg DOCKER_BUILD_PROXY=http://10.8.8.8:3142 -t deployable/verdaccio . && docker stop sinopia && docker rm sinopia && docker run -v sinopia-storage:/sinopia/storage:rw -p 4873:4873 -d --name sinopia --restart always deployable/sinopia
-
 FROM mhart/alpine-node:8.9.3 AS build
 
 ARG VERDACCIO_VERSION=2.7.3
