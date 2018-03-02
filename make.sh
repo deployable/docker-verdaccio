@@ -106,14 +106,19 @@ run_rebuild_proxy(){
 
 run_run(){ run_start "$@"; }
 run_start(){
+  run_start_local=${1:-}
+  if [ -n "$run_start_local" ]; then
+    run_start_local="-$run_start_local"
+  fi
   docker run \
     --detach \
     --volume ${NAME}-storage:${PATH_APP}/storage:rw \
     --publish ${PORT}:${PORT} \
     --name ${NAME} \
     --restart always  \
-    ${TAG_PREFIX}/${TAG_NAME}:${RELEASE}
+    ${TAG_PREFIX}/${TAG_NAME}:${RELEASE}${run_start_local}
 }
+run_run_local(){ run_start local "$@"; }
 
 run_stop(){
   docker stop ${NAME} ||  echo stop failed
@@ -182,6 +187,8 @@ case $cmd in
   "download")       run_download "$@";;
   "build:proxy")    run_build_proxy "$@";;
   "run")            run_run "$@";;
+  "stop")           run_stop "$@";;
+  "run:local")      run_run_local "$@";;
   "restart")        run_restart "$@";;
   '-h'|'--help'|'h'|'help') run_help;;
 esac
