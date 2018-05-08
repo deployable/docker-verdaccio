@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:8.9.3 AS build
+FROM mhart/alpine-node:8.11.1 AS build
 
 ENV VERDACCIO_VERSION=2.7.3
 ARG VERDACCIO_LABEL=verdaccio
@@ -23,7 +23,7 @@ RUN cd /app && yarn run build:webui
 
 # Stage 2
 
-FROM mhart/alpine-node:8.9.3
+FROM mhart/alpine-node:8.11.1
 WORKDIR /app
 
 ARG VERDACCIO_VERSION=2.7.3
